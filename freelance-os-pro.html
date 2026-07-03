@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>FreelanceOS Pro — IncomeAIHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#090f1a;
+  --surface:#0f1829;
+  --card:#162033;
+  --card2:#1c2840;
+  --border:#1f2e45;
+  --border2:#2a3d58;
+  --gold:#f5b731;
+  --gold2:#c4901e;
+  --emerald:#10b981;
+  --violet:#8b5cf6;
+  --rose:#f43f5e;
+  --sky:#38bdf8;
+  --orange:#f97316;
+  --text:#e8edf5;
+  --muted:#7a8fa8;
+  --faint:#1a2840;
+  --r:14px;
+  --rs:8px;
+  --mono:'DM Mono',monospace;
+  --sans:'DM Sans',sans-serif;
+  --disp:'Syne',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+button{font-family:var(--sans);cursor:pointer}
+input,textarea,select{font-family:var(--sans)}
+a{color:inherit;text-decoration:none}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* ── HEADER ── */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;gap:12px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:800;font-size:19px;letter-spacing:-.3px}
+.logo-ico{width:36px;height:36px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:9px;display:grid;place-items:center;font-size:17px;flex-shrink:0}
+.logo em{color:var(--gold);font-style:normal}
+.hdr-center{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:30px;padding:4px 6px}
+.hdr-tab{padding:6px 14px;border-radius:24px;font-size:12px;font-weight:600;color:var(--muted);border:none;background:transparent;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.hdr-tab.active{background:var(--gold);color:#090f1a}
+.hdr-tab:hover:not(.active){color:var(--text)}
+.hdr-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.api-pill{padding:5px 12px;border-radius:20px;border:1px solid var(--border);color:var(--muted);background:transparent;font-size:12px;font-family:var(--mono);transition:all .2s}
+.api-pill:hover{border-color:var(--gold);color:var(--gold)}
+.api-pill.on{border-color:var(--emerald);color:var(--emerald)}
+
+/* ── PAGES ── */
+.page{display:none;min-height:calc(100vh - 65px)}
+.page.active{display:block}
+
+/* ── HUB ── */
+.hub{padding:32px 36px;max-width:1300px;margin:0 auto}
+.hub-hero{text-align:center;padding:48px 20px 40px;position:relative}
+.hub-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(245,183,49,.08),transparent);pointer-events:none}
+.hub-hero h1{font-family:var(--disp);font-size:clamp(28px,5vw,52px);font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:14px}
+.hub-hero h1 span{background:linear-gradient(135deg,var(--gold),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hub-hero p{color:var(--muted);font-size:16px;max-width:500px;margin:0 auto 28px}
+.hub-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:36px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;position:relative;overflow:hidden}
+.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat-card:nth-child(1)::after{background:var(--gold)}
+.stat-card:nth-child(2)::after{background:var(--emerald)}
+.stat-card:nth-child(3)::after{background:var(--violet)}
+.stat-card:nth-child(4)::after{background:var(--sky)}
+.stat-num{font-family:var(--mono);font-size:28px;font-weight:500;line-height:1}
+.stat-lbl{font-size:12px;color:var(--muted);margin-top:4px}
+.stat-chg{font-size:11px;margin-top:8px;display:flex;align-items:center;gap:4px}
+.up{color:var(--emerald)} .dn{color:var(--rose)}
+
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin-bottom:36px}
+.tool-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;cursor:pointer;transition:all .22s;position:relative;overflow:hidden}
+.tool-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.tool-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .22s}
+.tool-card:hover::before{opacity:1}
+.tc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.tc-ico{width:44px;height:44px;border-radius:11px;display:grid;place-items:center;font-size:20px;flex-shrink:0}
+.tc-badge{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:10px;border:1px solid}
+.tc-title{font-family:var(--disp);font-size:16px;font-weight:700;margin-bottom:6px}
+.tc-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:14px}
+.tc-features{display:flex;flex-wrap:wrap;gap:6px}
+.tc-feat{font-size:11px;padding:3px 9px;background:var(--faint);border-radius:10px;color:var(--muted)}
+.tc-arrow{font-size:18px;color:var(--gold);margin-top:14px;display:block}
+
+.recent-activity{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px}
+.sec-title{font-family:var(--disp);font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.activity-list{display:flex;flex-direction:column;gap:10px}
+.act-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface);border-radius:var(--rs);font-size:13px}
+.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.act-time{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+/* ── TOOL PAGES ── */
+.tool-page{padding:0}
+.tool-layout{display:grid;grid-template-columns:320px 1fr;min-height:calc(100vh - 65px)}
+.t-sidebar{background:var(--surface);border-right:1px solid var(--border);padding:24px 20px;display:flex;flex-direction:column;gap:18px;overflow-y:auto;max-height:calc(100vh - 65px);position:sticky;top:65px}
+.t-main{padding:28px 32px;overflow-y:auto;max-height:calc(100vh - 65px)}
+.t-sidebar-title{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border)}
+
+/* form elements */
+label.lbl{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;letter-spacing:.2px}
+.inp,.sel,.ta{width:100%;background:var(--card);border:1px solid var(--border);border-radius:var(--rs);color:var(--text);font-size:13px;padding:9px 12px;outline:none;transition:border-color .2s}
+.inp:focus,.sel:focus,.ta:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,183,49,.07)}
+.ta{resize:none;min-height:90px}
+.sel option{background:var(--card)}
+.field{display:flex;flex-direction:column;gap:5px}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.chip{padding:5px 12px;border-radius:16px;font-size:12px;font-weight:500;border:1px solid var(--border);color:var(--muted);background:transparent;cursor:pointer;transition:all .15s}
+.chip:hover{border-color:var(--gold);color:var(--gold)}
+.chip.on{background:var(--gold);border-color:var(--gold);color:#090f1a}
+
+/* buttons */
+.btn-gold{width:100%;padding:12px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#090f1a;border:none;border-radius:var(--r);font-family:var(--disp);font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s,transform .1s;display:flex;align-items:center;justify-content:center;gap:7px}
+.btn-gold:hover{opacity:.9;transform:translateY(-1px)}
+.btn-gold:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn-ghost{width:100%;padding:10px;background:transparent;border:1px solid var(--border);border-radius:var(--r);color:var(--muted);font-size:13px;cursor:pointer;transition:all .2s}
+.btn-ghost:hover{border-color:var(--text);color:var(--text)}
+.btn-sm{padding:7px 14px;border-radius:var(--rs);font-size:12px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;gap:5px}
+.btn-sm:hover{border-color:var(--gold);color:var(--gold)}
+.btn-sm.primary{background:var(--gold);border-color:var(--gold);color:#090f1a;font-weight:600}
+
+/* cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px}
+.card-hd{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.card-ico{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;font-size:15px;flex-shrink:0}
+.card-title{font-family:var(--disp);font-size:15px;font-weight:700}
+.card-sub{font-size:11px;color:var(--muted);margin-top:1px}
+
+/* results */
+.result-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.res-card{background:var(--card2);border:1px solid var(--border);border-radius:var(--r);padding:18px;transition:border-color .2s}
+.res-card:hover{border-color:var(--border2)}
+.res-name{font-weight:600;font-size:14px;margin-bottom:4px}
+.res-meta{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:500}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;padding:10px 14px;font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);font-family:var(--mono)}
+.tbl td{padding:12px 14px;border-bottom:1px solid var(--faint);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+
+/* progress bar */
+.prog-wrap{height:6px;background:var(--faint);border-radius:3px;overflow:hidden;margin-top:4px}
+.prog-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+
+/* streaming */
+.stream-box{font-size:13px;line-height:1.8;color:#b8c8d8;white-space:pre-wrap;word-break:break-word}
+.stream-box h3{font-family:var(--disp);font-size:14px;font-weight:700;color:var(--text);margin:16px 0 6px}
+.stream-box strong{color:var(--gold)}
+.cursor{display:inline-block;width:2px;height:1em;background:var(--gold);margin-left:1px;vertical-align:middle;animation:blink .7s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* loading */
+.spin{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-c{display:flex;align-items:center;justify-content:center;gap:14px;padding:40px;color:var(--muted);font-size:13px}
+
+/* empty */
+.empty-c{text-align:center;padding:56px 20px;color:var(--muted)}
+.empty-c .e-ico{font-size:44px;margin-bottom:12px}
+.empty-c h3{font-family:var(--disp);font-size:17px;font-weight:700;color:var(--text);margin-bottom:6px}
+
+/* invoice specific */
+.inv-preview{background:#fff;color:#111;border-radius:var(--r);padding:32px;font-family:var(--sans);font-size:13px;line-height:1.6;max-width:680px;margin:0 auto}
+.inv-preview h2{font-size:24px;font-weight:800;color:#111;margin-bottom:4px}
+.inv-meta{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:20px 0;font-size:12px}
+.inv-table{width:100%;border-collapse:collapse;margin:20px 0;font-size:13px}
+.inv-table th{background:#f5f5f5;padding:8px 12px;text-align:left;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:#666}
+.inv-table td{padding:10px 12px;border-bottom:1px solid #eee}
+.inv-total{text-align:right;font-size:14px}
+.inv-total strong{font-size:18px;color:#111}
+.inv-footer{margin-top:24px;padding-top:16px;border-top:1px solid #eee;font-size:11px;color:#888}
+
+/* time tracker */
+.timer-big{font-family:var(--mono);font-size:52px;font-weight:500;color:var(--gold);letter-spacing:2px;text-align:center;padding:24px 0}
+.timer-controls{display:flex;gap:10px;justify-content:center;margin-bottom:20px}
+.t-btn{padding:10px 24px;border-radius:var(--r);border:none;font-size:14px;font-weight:600;cursor:pointer;transition:all .18s}
+.t-btn.start{background:var(--emerald);color:#fff}
+.t-btn.pause{background:var(--gold);color:#090f1a}
+.t-btn.stop{background:var(--rose);color:#fff}
+.t-btn:hover{opacity:.85;transform:scale(.98)}
+
+/* project kanban */
+.kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;min-height:300px}
+.kb-col{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;min-height:200px}
+.kb-col-hd{font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.kb-count{font-family:var(--mono);font-size:11px;background:var(--faint);padding:2px 7px;border-radius:10px}
+.kb-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:12px;margin-bottom:8px;cursor:grab;font-size:13px;transition:border-color .18s}
+.kb-card:hover{border-color:var(--border2)}
+.kb-card-title{font-weight:600;margin-bottom:4px}
+.kb-card-meta{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.priority-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* modal */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.75);display:grid;place-items:center;z-index:999;backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-ov.show{opacity:1;pointer-events:all}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px;width:90%;max-width:420px;transform:translateY(16px);transition:transform .2s;display:flex;flex-direction:column;gap:14px}
+.modal-ov.show .modal{transform:translateY(0)}
+.modal h3{font-family:var(--disp);font-size:17px;font-weight:800}
+.modal p{font-size:13px;color:var(--muted);line-height:1.6}
+.modal-btns{display:flex;gap:8px;margin-top:4px}
+.mbtn-p{flex:1;padding:10px;background:var(--gold);color:#090f1a;border:none;border-radius:var(--rs);font-family:var(--disp);font-weight:700;font-size:13px;cursor:pointer}
+.mbtn-s{padding:10px 16px;background:transparent;border:1px solid var(--border);border-radius:var(--rs);color:var(--muted);font-size:13px;cursor:pointer}
+
+/* toast */
+.toast{position:fixed;bottom:22px;right:22px;padding:11px 18px;background:var(--card2);border:1px solid var(--border2);border-radius:var(--rs);font-size:13px;color:var(--text);z-index:9999;transform:translateY(70px);transition:transform .3s;max-width:300px;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+.toast.show{transform:translateY(0)}
+
+/* ad slot */
+.ad{width:100%;min-height:80px;background:var(--surface);border:1px dashed var(--border);border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--border2);font-family:var(--mono);letter-spacing:.5px;margin:8px 0}
+
+.hidden{display:none!important}
+.flex{display:flex} .gap8{gap:8px} .gap12{gap:12px} .gap16{gap:16px}
+.mt8{margin-top:8px} .mt12{margin-top:12px} .mt16{margin-top:16px} .mt20{margin-top:20px}
+.mb12{margin-bottom:12px}
+.fw{font-weight:600} .mono{font-family:var(--mono)} .muted{color:var(--muted)}
+
+@media(max-width:900px){
+  .tool-layout{grid-template-columns:1fr}
+  .t-sidebar{position:relative;top:0;max-height:none;border-right:none;border-bottom:1px solid var(--border)}
+  .t-main{max-height:none;padding:20px 16px}
+  .hub{padding:20px 16px}
+  .hub-stats{grid-template-columns:repeat(2,1fr)}
+  .kanban{grid-template-columns:repeat(2,1fr)}
+  .hdr-center{display:none}
+}
+@media(max-width:500px){
+  .hub-stats{grid-template-columns:1fr 1fr}
+  .kanban{grid-template-columns:1fr}
+  .hdr{padding:12px 16px}
+  .logo em,.logo span{display:none}
+}
+@media print{.hdr,.t-sidebar,.btn-gold,.btn-ghost,.btn-sm,.ad{display:none!important}.inv-preview{box-shadow:none!important}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="logo">
+    <div class="logo-ico">⚡</div>
+    Freelance<em>OS</em> <span style="color:var(--muted);font-weight:400;font-size:14px">Pro</span>
+  </div>
+  <nav class="hdr-center" id="navTabs">
+    <button class="hdr-tab active" data-page="hub">🏠 Hub</button>
+    <button class="hdr-tab" data-page="client">🎯 Clients</button>
+    <button class="hdr-tab" data-page="proposal">📄 Proposals</button>
+    <button class="hdr-tab" data-page="invoice">💰 Invoices</button>
+    <button class="hdr-tab" data-page="project">📋 Projects</button>
+    <button class="hdr-tab" data-page="time">⏱ Time</button>
+  </nav>
+  <div class="hdr-right">
+    <button class="api-pill" id="apiBtn">⚙ API Key</button>
+  </div>
+</header>
+
+<!-- API MODAL -->
+<div class="modal-ov" id="apiModal">
+  <div class="modal">
+    <h3>🔑 Anthropic API Key</h3>
+    <p>Enter your key from console.anthropic.com. Stored only in your browser — never on any server.</p>
+    <div class="field"><label class="lbl">API Key</label><input type="password" class="inp" id="apiKeyInp" placeholder="sk-ant-..."/></div>
+    <p style="font-size:11px;color:var(--muted)">🔒 Stored in localStorage &nbsp;·&nbsp; Get key at console.anthropic.com</p>
+    <div class="modal-btns">
+      <button class="mbtn-p" id="saveKey">Save & Connect</button>
+      <button class="mbtn-s" id="closeApi">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE: HUB
+════════════════════════════════════════════ -->
+<div class="page active" id="page-hub">
+<div class="hub">
+  <div class="hub-hero">
+    <h1>Your Freelance Business,<br><span>Fully Automated</span></h1>
+    <p>From finding clients to getting paid — every workflow in one place, powered by AI.</p>
+  </div>
+
+  <div class="hub-stats">
+    <div class="stat-card">
+      <div class="stat-num mono" id="stat-clients">0</div>
+      <div class="stat-lbl">Clients Found</div>
+      <div class="stat-chg up">↑ Use Client Finder</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num mono" id="stat-proposals">0</div>
+      <div class="stat-lbl">Proposals Sent</div>
+      <div class="stat-chg up">↑ Win Rate: —</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num mono" id="stat-invoices">₹0</div>
+      <div class="stat-lbl">Invoiced (Total)</div>
+      <div class="stat-chg up">↑ Track payments</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num mono" id="stat-hours">0h</div>
+      <div class="stat-lbl">Hours Tracked</div>
+      <div class="stat-chg muted">→ Start timer</div>
+    </div>
+  </div>
+
+  <div class="tools-grid">
+    <div class="tool-card" onclick="goTo('client')">
+      <div class="tc-head">
+        <div class="tc-ico" style="background:rgba(245,183,49,.15)">🎯</div>
+        <span class="tc-badge" style="border-color:rgba(245,183,49,.4);color:var(--gold)">AI Powered</span>
+      </div>
+      <div class="tc-title">Client Hunter AI</div>
+      <div class="tc-desc">Find high-paying Indian & global clients using AI. Auto-generate personalized outreach emails instantly.</div>
+      <div class="tc-features">
+        <span class="tc-feat">Lead Generation</span>
+        <span class="tc-feat">Email Outreach</span>
+        <span class="tc-feat">Indian + Global</span>
+      </div>
+      <span class="tc-arrow">→</span>
+    </div>
+    <div class="tool-card" onclick="goTo('proposal')">
+      <div class="tc-head">
+        <div class="tc-ico" style="background:rgba(139,92,246,.15)">📄</div>
+        <span class="tc-badge" style="border-color:rgba(139,92,246,.4);color:var(--violet)">AI Powered</span>
+      </div>
+      <div class="tc-title">Proposal Builder AI</div>
+      <div class="tc-desc">Generate winning proposals and professional contracts in minutes. PDF-ready output.</div>
+      <div class="tc-features">
+        <span class="tc-feat">Proposals</span>
+        <span class="tc-feat">Contracts</span>
+        <span class="tc-feat">PDF Export</span>
+      </div>
+      <span class="tc-arrow">→</span>
+    </div>
+    <div class="tool-card" onclick="goTo('invoice')">
+      <div class="tc-head">
+        <div class="tc-ico" style="background:rgba(16,185,129,.15)">💰</div>
+        <span class="tc-badge" style="border-color:rgba(16,185,129,.4);color:var(--emerald)">GST Ready</span>
+      </div>
+      <div class="tc-title">Invoice & Payment Manager</div>
+      <div class="tc-desc">Create GST invoices, track payments, generate UPI/Razorpay links. Never chase payments again.</div>
+      <div class="tc-features">
+        <span class="tc-feat">GST Invoice</span>
+        <span class="tc-feat">UPI Link</span>
+        <span class="tc-feat">Payment Track</span>
+      </div>
+      <span class="tc-arrow">→</span>
+    </div>
+    <div class="tool-card" onclick="goTo('project')">
+      <div class="tc-head">
+        <div class="tc-ico" style="background:rgba(56,189,248,.15)">📋</div>
+        <span class="tc-badge" style="border-color:rgba(56,189,248,.4);color:var(--sky)">Kanban</span>
+      </div>
+      <div class="tc-title">Project Command Center</div>
+      <div class="tc-desc">Manage all projects with Kanban board, deadlines, client notes, and AI status updates.</div>
+      <div class="tc-features">
+        <span class="tc-feat">Kanban Board</span>
+        <span class="tc-feat">Deadlines</span>
+        <span class="tc-feat">AI Updates</span>
+      </div>
+      <span class="tc-arrow">→</span>
+    </div>
+    <div class="tool-card" onclick="goTo('time')">
+      <div class="tc-head">
+        <div class="tc-ico" style="background:rgba(249,115,22,.15)">⏱</div>
+        <span class="tc-badge" style="border-color:rgba(249,115,22,.4);color:var(--orange)">Auto Report</span>
+      </div>
+      <div class="tc-title">Time Tracker & Reports</div>
+      <div class="tc-desc">Track billable hours per client, auto-generate time reports, calculate earnings instantly.</div>
+      <div class="tc-features">
+        <span class="tc-feat">Live Timer</span>
+        <span class="tc-feat">Client Reports</span>
+        <span class="tc-feat">Earnings Calc</span>
+      </div>
+      <span class="tc-arrow">→</span>
+    </div>
+    <div class="tool-card" style="border-style:dashed;cursor:default;opacity:.5">
+      <div class="tc-ico" style="background:var(--faint);margin-bottom:12px">➕</div>
+      <div class="tc-title">More Tools Coming</div>
+      <div class="tc-desc">Contract templates, Rate calculator, Client CRM, WhatsApp follow-up, and more — coming soon!</div>
+    </div>
+  </div>
+
+  <div class="recent-activity">
+    <div class="sec-title">⚡ Recent Activity</div>
+    <div class="activity-list" id="activityList">
+      <div class="act-item"><div class="act-dot" style="background:var(--gold)"></div>Welcome to FreelanceOS Pro — start with Client Hunter AI!<span class="act-time">Now</span></div>
+    </div>
+  </div>
+  <div class="ad" style="margin-top:20px">[ AdSense 728×90 ]</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE: CLIENT HUNTER AI
+════════════════════════════════════════════ -->
+<div class="page" id="page-client">
+<div class="tool-layout">
+  <aside class="t-sidebar">
+    <div class="t-sidebar-title">🎯 Client Hunter AI</div>
+    <div class="field"><label class="lbl">Your Skill / Service</label><input class="inp" id="c-skill" placeholder="e.g. React Developer, GST Consultant..."/></div>
+    <div class="field"><label class="lbl">Target Market</label>
+      <div class="chips" id="c-market">
+        <button class="chip on" data-v="Indian CA Firms">🇮🇳 CA Firms</button>
+        <button class="chip" data-v="Indian MSMEs">🏭 MSMEs</button>
+        <button class="chip" data-v="Indian Startups">🚀 Startups</button>
+        <button class="chip" data-v="Global (Upwork)">🌍 Upwork</button>
+        <button class="chip" data-v="Global (LinkedIn)">💼 LinkedIn</button>
+        <button class="chip" data-v="US Startups">🇺🇸 US Clients</button>
+      </div>
+    </div>
+    <div class="field"><label class="lbl">Budget Range</label>
+      <select class="sel" id="c-budget">
+        <option>₹5,000–₹20,000/project</option>
+        <option>₹20,000–₹50,000/project</option>
+        <option>₹50,000–₹1,00,000/project</option>
+        <option>₹1,00,000+/project</option>
+        <option>$500–$2000/project</option>
+        <option>$2000–$10,000/project</option>
+      </select>
+    </div>
+    <div class="field"><label class="lbl">Your Experience (years)</label><input class="inp" id="c-exp" placeholder="e.g. 3" type="number" min="0" max="30"/></div>
+    <div class="field"><label class="lbl">Your USP / Key Strength</label><textarea class="ta" id="c-usp" placeholder="What makes you different? Your specialization, past results..."></textarea></div>
+    <div class="field"><label class="lbl">No. of Leads to Generate</label>
+      <select class="sel" id="c-count"><option value="5">5 leads</option><option value="8" selected>8 leads</option><option value="10">10 leads</option><option value="15">15 leads</option></select>
+    </div>
+    <div class="ad">[ AdSense ]</div>
+    <button class="btn-gold" id="c-btn">🎯 Find Clients</button>
+    <button class="btn-ghost" id="c-outreach-btn">✉ Generate Outreach Emails</button>
+  </aside>
+  <main class="t-main">
+    <div class="empty-c" id="c-empty"><div class="e-ico">🎯</div><h3>Find Your Next Client</h3><p>Fill in your details and let AI find high-paying leads for your skill set.</p></div>
+    <div class="loading-c hidden" id="c-loading"><div class="spin"></div><span>AI scanning client opportunities...</span></div>
+    <div class="hidden" id="c-results">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+        <div class="card-title" style="font-family:var(--disp)">🎯 Client Leads Found</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-sm" onclick="copyLeads()">📋 Copy All</button>
+          <button class="btn-sm primary" onclick="goTo('proposal')">→ Create Proposal</button>
+        </div>
+      </div>
+      <div class="result-grid" id="c-lead-list"></div>
+      <div class="card mt16" id="c-email-section" style="display:none">
+        <div class="card-hd"><div class="card-ico" style="background:rgba(245,183,49,.12)">✉</div><div><div class="card-title">Outreach Email Templates</div><div class="card-sub">Personalized emails ready to copy & send</div></div></div>
+        <div class="stream-box" id="c-email-content"></div>
+      </div>
+    </div>
+  </main>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE: PROPOSAL BUILDER
+════════════════════════════════════════════ -->
+<div class="page" id="page-proposal">
+<div class="tool-layout">
+  <aside class="t-sidebar">
+    <div class="t-sidebar-title">📄 Proposal Builder AI</div>
+    <div class="field"><label class="lbl">Client Name / Company</label><input class="inp" id="p-client" placeholder="Sharma & Associates CA Firm"/></div>
+    <div class="field"><label class="lbl">Project Title</label><input class="inp" id="p-title" placeholder="GST Filing Automation Website"/></div>
+    <div class="field"><label class="lbl">Project Description</label><textarea class="ta" id="p-desc" placeholder="Describe what the client needs..."></textarea></div>
+    <div class="field"><label class="lbl">Your Name / Firm</label><input class="inp" id="p-yourname" placeholder="Your name or company"/></div>
+    <div class="field"><label class="lbl">Project Budget</label><input class="inp" id="p-budget" placeholder="₹45,000"/></div>
+    <div class="field"><label class="lbl">Timeline</label><input class="inp" id="p-timeline" placeholder="3 weeks / 21 days"/></div>
+    <div class="field"><label class="lbl">Document Type</label>
+      <div class="chips" id="p-type">
+        <button class="chip on" data-v="proposal">📄 Proposal</button>
+        <button class="chip" data-v="contract">📑 Contract</button>
+        <button class="chip" data-v="both">📦 Both</button>
+      </div>
+    </div>
+    <div class="field"><label class="lbl">Tone</label>
+      <select class="sel" id="p-tone"><option>Professional & Formal</option><option>Friendly & Conversational</option><option>Confident & Direct</option></select>
+    </div>
+    <div class="ad">[ AdSense ]</div>
+    <button class="btn-gold" id="p-btn">📄 Generate Document</button>
+    <button class="btn-ghost" onclick="printProposal()">🖨 Print / Save PDF</button>
+  </aside>
+  <main class="t-main">
+    <div class="empty-c" id="p-empty"><div class="e-ico">📄</div><h3>Build a Winning Proposal</h3><p>Fill project details and AI will write a professional proposal or contract for you.</p></div>
+    <div class="loading-c hidden" id="p-loading"><div class="spin"></div><span>Writing your proposal...</span></div>
+    <div class="hidden" id="p-results">
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+        <button class="btn-sm" onclick="copyProposal()">📋 Copy</button>
+        <button class="btn-sm" onclick="printProposal()">🖨 Print/PDF</button>
+        <button class="btn-sm primary" onclick="goTo('invoice')">→ Create Invoice</button>
+      </div>
+      <div class="card"><div class="stream-box" id="p-content"></div></div>
+    </div>
+  </main>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE: INVOICE & PAYMENT
+════════════════════════════════════════════ -->
+<div class="page" id="page-invoice">
+<div class="tool-layout">
+  <aside class="t-sidebar">
+    <div class="t-sidebar-title">💰 Invoice Manager</div>
+    <div class="field"><label class="lbl">Your Name / Firm</label><input class="inp" id="i-from" placeholder="Your Name / Company"/></div>
+    <div class="field"><label class="lbl">Your GST Number (optional)</label><input class="inp" id="i-gst" placeholder="27AAAAA0000A1Z5"/></div>
+    <div class="field"><label class="lbl">Client Name</label><input class="inp" id="i-cname" placeholder="Client Company Name"/></div>
+    <div class="field"><label class="lbl">Client Address</label><textarea class="ta" id="i-caddr" placeholder="Client address..." style="min-height:60px"></textarea></div>
+    <div class="field"><label class="lbl">Invoice Number</label><input class="inp" id="i-num" placeholder="INV-001"/></div>
+    <div class="field"><label class="lbl">Invoice Date</label><input class="inp" type="date" id="i-date"/></div>
+    <div class="field"><label class="lbl">Due Date</label><input class="inp" type="date" id="i-due"/></div>
+    <div id="i-items-wrap">
+      <label class="lbl" style="margin-bottom:6px">Line Items</label>
+      <div id="i-items"></div>
+      <button class="btn-ghost mt8" onclick="addItem()" style="padding:7px">+ Add Item</button>
+    </div>
+    <div class="field"><label class="lbl">GST Rate</label>
+      <select class="sel" id="i-gstrate"><option value="0">0% (Exempt)</option><option value="5">5%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="28">28%</option></select>
+    </div>
+    <div class="field"><label class="lbl">Payment Method</label>
+      <select class="sel" id="i-pay"><option>UPI / GPay</option><option>Bank Transfer / NEFT</option><option>Razorpay Link</option><option>Cheque</option><option>PayPal (International)</option></select>
+    </div>
+    <div class="field"><label class="lbl">UPI ID (for payment)</label><input class="inp" id="i-upi" placeholder="yourname@upi"/></div>
+    <div class="ad">[ AdSense ]</div>
+    <button class="btn-gold" onclick="generateInvoice()">💰 Generate Invoice</button>
+    <button class="btn-ghost" onclick="printInvoice()">🖨 Print / Save PDF</button>
+  </aside>
+  <main class="t-main">
+    <div class="empty-c" id="i-empty"><div class="e-ico">💰</div><h3>Create GST Invoice</h3><p>Fill details on the left to generate a professional GST-ready invoice instantly.</p></div>
+    <div class="hidden" id="i-results">
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+        <button class="btn-sm" onclick="printInvoice()">🖨 Print / PDF</button>
+        <button class="btn-sm" onclick="copyInvoiceText()">📋 Copy Details</button>
+        <button class="btn-sm primary" onclick="trackPayment()">✅ Mark as Paid</button>
+      </div>
+      <div id="i-preview"></div>
+      <div class="card mt16" id="i-tracker">
+        <div class="card-hd"><div class="card-ico" style="background:rgba(16,185,129,.12)">📊</div><div class="card-title">Payment Tracker</div></div>
+        <div style="overflow-x:auto"><table class="tbl" id="i-track-tbl"><thead><tr><th>Invoice #</th><th>Client</th><th>Amount</th><th>Due</th><th>Status</th><th>Action</th></tr></thead><tbody id="i-track-body"></tbody></table></div>
+      </div>
+    </div>
+  </main>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE: PROJECT COMMAND CENTER
+════════════════════════════════════════════ -->
+<div class="page" id="page-project">
+<div class="tool-layout">
+  <aside class="t-sidebar">
+    <div class="t-sidebar-title">📋 Project Manager</div>
+    <div class="field"><label class="lbl">Project Name</label><input class="inp" id="pr-name" placeholder="CA Website Redesign"/></div>
+    <div class="field"><label class="lbl">Client Name</label><input class="inp" id="pr-client" placeholder="Sharma & Co."/></div>
+    <div class="field"><label class="lbl">Deadline</label><input class="inp" type="date" id="pr-deadline"/></div>
+    <div class="field"><label class="lbl">Budget (₹)</label><input class="inp" id="pr-budget" placeholder="45000" type="number"/></div>
+    <div class="field"><label class="lbl">Priority</label>
+      <div class="chips" id="pr-priority">
+        <button class="chip" data-v="low">🟢 Low</button>
+        <button class="chip on" data-v="medium">🟡 Medium</button>
+        <button class="chip" data-v="high">🔴 High</button>
+      </div>
+    </div>
+    <div class="field"><label class="lbl">Description / Scope</label><textarea class="ta" id="pr-desc" placeholder="Project scope, deliverables..."></textarea></div>
+    <button class="btn-gold" onclick="addProject()">➕ Add Project</button>
+    <hr style="border-color:var(--border);margin:4px 0"/>
+    <div class="field"><label class="lbl">Quick Task</label><input class="inp" id="pr-task" placeholder="Task name..."/></div>
+    <div class="field"><label class="lbl">Add to Project</label><select class="sel" id="pr-task-proj"><option value="">Select project...</option></select></div>
+    <button class="btn-ghost" onclick="addTask()">+ Add Task</button>
+    <div class="ad">[ AdSense ]</div>
+    <button class="btn-gold" id="pr-ai-btn" style="background:linear-gradient(135deg,var(--violet),#6d28d9)">🤖 AI Status Update</button>
+  </aside>
+  <main class="t-main">
+    <div class="empty-c" id="pr-empty"><div class="e-ico">📋</div><h3>Your Project Board</h3><p>Add your first project to get started with the Kanban board.</p></div>
+    <div class="hidden" id="pr-results">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+        <div class="card-title" style="font-family:var(--disp)">📋 Project Board</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-sm" onclick="clearProjects()">🗑 Clear All</button>
+        </div>
+      </div>
+      <div class="kanban" id="kanban-board">
+        <div class="kb-col" id="kb-todo"><div class="kb-col-hd">📌 To Do<span class="kb-count" id="cnt-todo">0</span></div></div>
+        <div class="kb-col" id="kb-inprog"><div class="kb-col-hd">⚡ In Progress<span class="kb-count" id="cnt-inprog">0</span></div></div>
+        <div class="kb-col" id="kb-review"><div class="kb-col-hd">👀 Review<span class="kb-count" id="cnt-review">0</span></div></div>
+        <div class="kb-col" id="kb-done"><div class="kb-col-hd">✅ Done<span class="kb-count" id="cnt-done">0</span></div></div>
+      </div>
+      <div class="card mt16" id="pr-ai-result" style="display:none">
+        <div class="card-hd"><div class="card-ico" style="background:rgba(139,92,246,.15)">🤖</div><div class="card-title">AI Project Status Report</div></div>
+        <div class="stream-box" id="pr-ai-content"></div>
+      </div>
+    </div>
+  </main>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE: TIME TRACKER
+════════════════════════════════════════════ -->
+<div class="page" id="page-time">
+<div class="tool-layout">
+  <aside class="t-sidebar">
+    <div class="t-sidebar-title">⏱ Time Tracker</div>
+    <div class="field"><label class="lbl">Client / Project</label><input class="inp" id="tt-client" placeholder="Client name..."/></div>
+    <div class="field"><label class="lbl">Task Description</label><input class="inp" id="tt-task" placeholder="What are you working on?"/></div>
+    <div class="field"><label class="lbl">Hourly Rate</label>
+      <div style="position:relative"><span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px">₹</span>
+      <input class="inp" id="tt-rate" placeholder="1500" type="number" style="padding-left:24px"/></div>
+    </div>
+    <hr style="border-color:var(--border)"/>
+    <div class="field"><label class="lbl">Manual Log</label><input class="inp" type="date" id="tt-date"/></div>
+    <div class="field" style="flex-direction:row;gap:8px;align-items:flex-end">
+      <div style="flex:1"><label class="lbl">Hours</label><input class="inp" id="tt-hours" placeholder="2.5" type="number" step="0.5"/></div>
+      <button class="btn-sm primary" onclick="manualLog()" style="margin-bottom:0;height:36px">Log</button>
+    </div>
+    <div class="ad">[ AdSense ]</div>
+    <button class="btn-gold" id="tt-report-btn">📊 Generate AI Report</button>
+  </aside>
+  <main class="t-main">
+    <!-- Timer -->
+    <div class="card mb12">
+      <div class="card-hd"><div class="card-ico" style="background:rgba(249,115,22,.15)">⏱</div><div class="card-title">Live Timer</div></div>
+      <div class="timer-big" id="timer-display">00:00:00</div>
+      <div class="timer-controls">
+        <button class="t-btn start" id="tt-start" onclick="startTimer()">▶ Start</button>
+        <button class="t-btn pause hidden" id="tt-pause" onclick="pauseTimer()">⏸ Pause</button>
+        <button class="t-btn stop" id="tt-stop" onclick="stopTimer()">⏹ Stop & Log</button>
+      </div>
+      <p class="muted" style="text-align:center;font-size:12px" id="tt-current-label">Select client & task, then start timer</p>
+    </div>
+    <!-- Log Table -->
+    <div class="card mb12">
+      <div class="card-hd"><div class="card-ico" style="background:rgba(56,189,248,.12)">📋</div><div><div class="card-title">Time Log</div><div class="card-sub" id="tt-total-display">Total: 0h 0m | Earnings: ₹0</div></div></div>
+      <div style="overflow-x:auto">
+        <table class="tbl" id="tt-table">
+          <thead><tr><th>Date</th><th>Client</th><th>Task</th><th>Duration</th><th>Rate</th><th>Earnings</th><th></th></tr></thead>
+          <tbody id="tt-tbody"></tbody>
+        </table>
+      </div>
+      <div class="empty-c" id="tt-empty" style="padding:30px 0"><div class="e-ico" style="font-size:28px">⏱</div><p style="font-size:13px">No time logged yet. Start the timer!</p></div>
+    </div>
+    <!-- AI Report -->
+    <div class="card hidden" id="tt-report-card">
+      <div class="card-hd"><div class="card-ico" style="background:rgba(245,183,49,.12)">📊</div><div class="card-title">AI Productivity Report</div></div>
+      <div class="loading-c hidden" id="tt-r-loading"><div class="spin"></div><span>Analyzing your time data...</span></div>
+      <div class="stream-box" id="tt-report-content"></div>
+    </div>
+  </main>
+</div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════
+   CORE STATE & UTILS
+════════════════════════════════════════════ */
+let API_KEY = localStorage.getItem('fos_key') || '';
+const store = {
+  leads: [], proposals: [], invoices: [], projects: [], tasks: [], timeLogs: [],
+  stats: { clients: 0, proposals: 0, invoiced: 0, hours: 0 }
+};
+
+function save() { localStorage.setItem('fos_data', JSON.stringify(store)); }
+function load() {
+  const d = localStorage.getItem('fos_data');
+  if (d) Object.assign(store, JSON.parse(d));
+  updateHubStats();
+}
+
+function toast(msg, dur = 3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+
+function logActivity(msg, color = 'var(--gold)') {
+  const list = document.getElementById('activityList');
+  const item = document.createElement('div');
+  item.className = 'act-item';
+  const time = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+  item.innerHTML = `<div class="act-dot" style="background:${color}"></div>${msg}<span class="act-time">${time}</span>`;
+  list.insertBefore(item, list.firstChild);
+  if (list.children.length > 8) list.lastChild.remove();
+}
+
+function updateHubStats() {
+  document.getElementById('stat-clients').textContent = store.stats.clients;
+  document.getElementById('stat-proposals').textContent = store.stats.proposals;
+  document.getElementById('stat-invoices').textContent = '₹' + (store.stats.invoiced || 0).toLocaleString('en-IN');
+  document.getElementById('stat-hours').textContent = (store.stats.hours || 0).toFixed(1) + 'h';
+}
+
+async function callAI(prompt, maxTokens = 2000) {
+  if (!API_KEY) { document.getElementById('apiModal').classList.add('show'); throw new Error('No API key'); }
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+    body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: maxTokens, messages: [{ role: 'user', content: prompt }] })
+  });
+  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || 'API Error ' + res.status); }
+  const data = await res.json();
+  return data.content[0]?.text || '';
+}
+
+function typeWrite(el, text, speed = 12) {
+  el.innerHTML = '';
+  let i = 0;
+  const cursor = document.createElement('span');
+  cursor.className = 'cursor';
+  el.appendChild(cursor);
+  const iv = setInterval(() => {
+    if (i >= text.length) { clearInterval(iv); cursor.remove(); el.innerHTML = mdToHtml(text); return; }
+    el.innerHTML = mdToHtml(text.slice(0, i + 4));
+    el.appendChild(cursor);
+    i += 4;
+  }, speed);
+}
+
+function mdToHtml(t) {
+  return t.replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h3>$1</h3>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/^- (.+)$/gm,'<li>$1</li>').replace(/(<li>.+<\/li>\n?)+/g,s=>`<ul>${s}</ul>`).replace(/\n\n/g,'<br><br>');
+}
+
+function getChipVal(groupId) {
+  const on = document.querySelector(`#${groupId} .chip.on`);
+  return on ? on.dataset.v : '';
+}
+
+function initChips(groupId, multi = false) {
+  document.querySelectorAll(`#${groupId} .chip`).forEach(c => {
+    c.addEventListener('click', () => {
+      if (!multi) { document.querySelectorAll(`#${groupId} .chip`).forEach(x => x.classList.remove('on')); c.classList.add('on'); }
+      else c.classList.toggle('on');
+    });
+  });
+}
+
+function getMultiChips(groupId) {
+  return [...document.querySelectorAll(`#${groupId} .chip.on`)].map(c => c.dataset.v);
+}
+
+/* ── NAV ── */
+function goTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.hdr-tab').forEach(t => { t.classList.toggle('active', t.dataset.page === page); });
+  document.getElementById('page-' + page).classList.add('active');
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll('.hdr-tab').forEach(t => t.addEventListener('click', () => goTo(t.dataset.page)));
+
+/* ── API KEY ── */
+document.getElementById('apiBtn').addEventListener('click', () => { document.getElementById('apiKeyInp').value = API_KEY; document.getElementById('apiModal').classList.add('show'); });
+document.getElementById('closeApi').addEventListener('click', () => document.getElementById('apiModal').classList.remove('show'));
+document.getElementById('apiModal').addEventListener('click', e => { if (e.target.id === 'apiModal') document.getElementById('apiModal').classList.remove('show'); });
+document.getElementById('saveKey').addEventListener('click', () => {
+  const v = document.getElementById('apiKeyInp').value.trim();
+  if (!v) { toast('⚠ Please enter API key'); return; }
+  API_KEY = v; localStorage.setItem('fos_key', v);
+  const btn = document.getElementById('apiBtn');
+  btn.textContent = '✓ Connected'; btn.classList.add('on');
+  document.getElementById('apiModal').classList.remove('show');
+  toast('✅ API Key saved!');
+});
+function checkApiState() { if (API_KEY) { document.getElementById('apiBtn').textContent = '✓ Connected'; document.getElementById('apiBtn').classList.add('on'); } }
+
+/* ════════════════════════════════════════════
+   TOOL 1 — CLIENT HUNTER AI
+════════════════════════════════════════════ */
+initChips('c-market', true);
+initChips('p-type');
+initChips('pr-priority');
+
+document.getElementById('c-btn').addEventListener('click', async () => {
+  const skill = document.getElementById('c-skill').value.trim();
+  if (!skill) { toast('⚠ Enter your skill/service first'); return; }
+  const markets = getMultiChips('c-market');
+  const budget = document.getElementById('c-budget').value;
+  const exp = document.getElementById('c-exp').value || '2';
+  const usp = document.getElementById('c-usp').value;
+  const count = document.getElementById('c-count').value;
+
+  document.getElementById('c-empty').classList.add('hidden');
+  document.getElementById('c-results').classList.add('hidden');
+  document.getElementById('c-loading').classList.remove('hidden');
+  document.getElementById('c-btn').disabled = true;
+
+  try {
+    const text = await callAI(`You are a business development expert for Indian freelancers. Generate ${count} realistic, specific client leads for a freelancer with these details:
+Skill: ${skill}
+Target Markets: ${markets.join(', ')}
+Budget Range: ${budget}
+Experience: ${exp} years
+USP: ${usp || 'Strong technical skills'}
+
+Return ONLY a JSON array (no markdown) of ${count} objects:
+[{"companyName":"...","industry":"...","location":"...","contactRole":"...","estimatedBudget":"...","projectType":"...","painPoint":"...","approachTip":"...","platform":"...","urgency":"high|medium|low"}]
+
+Make them very specific and realistic for the Indian market. Include a mix of cities, company sizes, and platforms.`, 2500);
+
+    let leads;
+    try { leads = JSON.parse(text.replace(/```json|```/g,'').trim()); } catch { leads = mockLeads(skill, count); }
+    store.leads = leads;
+    store.stats.clients += leads.length;
+    save(); updateHubStats();
+    renderLeads(leads);
+    logActivity(`Found ${leads.length} client leads for "${skill}"`, 'var(--gold)');
+    document.getElementById('c-loading').classList.add('hidden');
+    document.getElementById('c-results').classList.remove('hidden');
+  } catch (e) {
+    document.getElementById('c-loading').classList.add('hidden');
+    document.getElementById('c-empty').classList.remove('hidden');
+    toast('❌ ' + e.message, 4000);
+  }
+  document.getElementById('c-btn').disabled = false;
+});
+
+function mockLeads(skill, count) {
+  const templates = [
+    { companyName: 'Sharma & Associates CA Firm', industry: 'Accounting', location: 'Mumbai', contactRole: 'Managing Partner', estimatedBudget: '₹35,000', projectType: `${skill} Solution`, painPoint: 'Manual processes slowing down work', approachTip: 'Email with ROI calculation', platform: 'Direct Outreach', urgency: 'high' },
+    { companyName: 'TechBridge Startups Pvt Ltd', industry: 'Technology', location: 'Bangalore', contactRole: 'CTO', estimatedBudget: '₹60,000', projectType: `Custom ${skill}`, painPoint: 'Scaling their digital operations', approachTip: 'LinkedIn connection + portfolio', platform: 'LinkedIn', urgency: 'medium' },
+    { companyName: 'Gupta Textile Exports', industry: 'MSME/Manufacturing', location: 'Surat', contactRole: 'Owner', estimatedBudget: '₹25,000', projectType: `${skill} for business`, painPoint: 'No digital presence', approachTip: 'WhatsApp intro + free audit offer', platform: 'WhatsApp', urgency: 'medium' },
+    { companyName: 'US Fintech Startup', industry: 'Finance', location: 'Remote/USA', contactRole: 'Product Manager', estimatedBudget: '$2,500', projectType: `Freelance ${skill}`, painPoint: 'Need quality work at lower cost', approachTip: 'Upwork proposal with samples', platform: 'Upwork', urgency: 'high' },
+    { companyName: 'Delhi MSME Association', industry: 'Trade', location: 'Delhi NCR', contactRole: 'Secretary', estimatedBudget: '₹40,000', projectType: `${skill} Project`, painPoint: 'Members need digital tools', approachTip: 'B2B proposal for members', platform: 'Direct', urgency: 'low' },
+  ];
+  return templates.slice(0, parseInt(count));
+}
+
+function renderLeads(leads) {
+  const urgColors = { high: 'var(--rose)', medium: 'var(--gold)', low: 'var(--emerald)' };
+  document.getElementById('c-lead-list').innerHTML = leads.map((l, i) => `
+    <div class="res-card">
+      <div class="res-name">🏢 ${l.companyName}</div>
+      <div class="res-meta">
+        <span>📍 ${l.location}</span>
+        <span>🏭 ${l.industry}</span>
+        <span>👤 ${l.contactRole}</span>
+      </div>
+      <div style="margin-bottom:8px">
+        <span class="tag" style="background:rgba(245,183,49,.12);color:var(--gold)">💰 ${l.estimatedBudget}</span>
+        <span class="tag" style="background:${urgColors[l.urgency]}22;color:${urgColors[l.urgency]};border:1px solid ${urgColors[l.urgency]}44">${l.urgency?.toUpperCase()}</span>
+        <span class="tag" style="background:rgba(56,189,248,.1);color:var(--sky)">${l.platform}</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px">🎯 ${l.projectType}</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">⚠ Pain: ${l.painPoint}</div>
+      <div style="font-size:12px;background:var(--faint);padding:7px 10px;border-radius:6px">💡 <strong style="color:var(--gold)">Approach:</strong> ${l.approachTip}</div>
+      <button class="btn-sm primary mt8" onclick="useLeadForProposal(${i})">→ Write Proposal</button>
+    </div>`).join('');
+}
+
+function useLeadForProposal(i) {
+  const l = store.leads[i];
+  if (!l) return;
+  document.getElementById('p-client').value = l.companyName;
+  document.getElementById('p-budget').value = l.estimatedBudget;
+  document.getElementById('p-title').value = l.projectType;
+  document.getElementById('p-desc').value = `Client Pain Point: ${l.painPoint}\nContact: ${l.contactRole}\nLocation: ${l.location}`;
+  goTo('proposal');
+  toast('✅ Lead imported to Proposal Builder!');
+}
+
+function copyLeads() {
+  const txt = store.leads.map((l,i) => `${i+1}. ${l.companyName} | ${l.location} | ${l.estimatedBudget} | ${l.contactRole}\n   Approach: ${l.approachTip}`).join('\n\n');
+  navigator.clipboard.writeText(txt).then(() => toast('📋 Leads copied!'));
+}
+
+document.getElementById('c-outreach-btn').addEventListener('click', async () => {
+  if (!store.leads.length) { toast('⚠ Find leads first!'); return; }
+  const skill = document.getElementById('c-skill').value || 'Developer';
+  const yourName = 'Your Name';
+  document.getElementById('c-email-section').style.display = 'block';
+  document.getElementById('c-outreach-btn').disabled = true;
+  try {
+    const text = await callAI(`Write 3 short, personalized outreach email templates for a ${skill} freelancer targeting these types of clients: ${store.leads.slice(0,3).map(l => l.companyName + ' (' + l.industry + ')').join(', ')}.
+
+Each email should:
+- Be 5-7 lines max
+- Have a compelling subject line
+- Mention their specific industry pain point
+- Have a clear CTA
+- Sound human, not salesy
+- Be appropriate for Indian business context
+
+Format with ### Subject: and ### Email: headers for each.`, 1500);
+    typeWrite(document.getElementById('c-email-content'), text);
+    logActivity('Generated outreach email templates', 'var(--sky)');
+  } catch (e) { toast('❌ ' + e.message); }
+  document.getElementById('c-outreach-btn').disabled = false;
+});
+
+/* ════════════════════════════════════════════
+   TOOL 2 — PROPOSAL BUILDER
+════════════════════════════════════════════ */
+document.getElementById('p-btn').addEventListener('click', async () => {
+  const client = document.getElementById('p-client').value.trim();
+  const title = document.getElementById('p-title').value.trim();
+  if (!client || !title) { toast('⚠ Enter client name and project title'); return; }
+  const desc = document.getElementById('p-desc').value;
+  const yourName = document.getElementById('p-yourname').value || 'Your Name';
+  const budget = document.getElementById('p-budget').value || 'As discussed';
+  const timeline = document.getElementById('p-timeline').value || '2-3 weeks';
+  const docType = getChipVal('p-type');
+  const tone = document.getElementById('p-tone').value;
+
+  document.getElementById('p-empty').classList.add('hidden');
+  document.getElementById('p-results').classList.add('hidden');
+  document.getElementById('p-loading').classList.remove('hidden');
+  document.getElementById('p-btn').disabled = true;
+
+  try {
+    const text = await callAI(`You are a professional proposal writer for Indian freelancers. Write a ${docType === 'both' ? 'proposal AND contract' : docType} document.
+
+Details:
+- Client: ${client}
+- Project: ${title}
+- Description: ${desc || 'Standard project'}
+- Freelancer: ${yourName}
+- Budget: ${budget}
+- Timeline: ${timeline}
+- Tone: ${tone}
+
+Write a complete, professional ${docType} that includes:
+${docType === 'proposal' || docType === 'both' ? '**PROPOSAL SECTION:**\n- Executive Summary\n- Understanding of Requirements\n- Proposed Solution & Approach\n- Deliverables\n- Timeline with milestones\n- Investment (pricing)\n- Why Choose Me\n- Next Steps' : ''}
+${docType === 'contract' || docType === 'both' ? '**CONTRACT SECTION:**\n- Scope of Work\n- Payment Terms (with Indian GST mention)\n- Revision Policy\n- Intellectual Property\n- Confidentiality\n- Termination Clause\n- Signatures' : ''}
+
+Use **bold** for section headers. Be specific and professional. Include all details provided.`, 3000);
+
+    store.stats.proposals++;
+    save(); updateHubStats();
+    document.getElementById('p-loading').classList.add('hidden');
+    document.getElementById('p-results').classList.remove('hidden');
+    typeWrite(document.getElementById('p-content'), text);
+    logActivity(`Proposal generated for ${client}`, 'var(--violet)');
+    toast('✅ Proposal generated!');
+  } catch (e) {
+    document.getElementById('p-loading').classList.add('hidden');
+    document.getElementById('p-empty').classList.remove('hidden');
+    toast('❌ ' + e.message, 4000);
+  }
+  document.getElementById('p-btn').disabled = false;
+});
+
+function copyProposal() { navigator.clipboard.writeText(document.getElementById('p-content').innerText).then(() => toast('📋 Proposal copied!')); }
+function printProposal() { window.print(); }
+
+/* ════════════════════════════════════════════
+   TOOL 3 — INVOICE MANAGER
+════════════════════════════════════════════ */
+let invoiceItems = [{ desc: '', qty: 1, rate: 0 }];
+
+function renderItems() {
+  const wrap = document.getElementById('i-items');
+  wrap.innerHTML = invoiceItems.map((item, i) => `
+    <div style="display:grid;grid-template-columns:1fr 60px 80px 28px;gap:6px;margin-bottom:6px;align-items:center">
+      <input class="inp" placeholder="Service/Item" value="${item.desc}" oninput="invoiceItems[${i}].desc=this.value" style="font-size:12px"/>
+      <input class="inp" placeholder="Qty" type="number" value="${item.qty}" oninput="invoiceItems[${i}].qty=+this.value" style="font-size:12px"/>
+      <input class="inp" placeholder="Rate ₹" type="number" value="${item.rate||''}" oninput="invoiceItems[${i}].rate=+this.value" style="font-size:12px"/>
+      <button onclick="removeItem(${i})" style="background:none;border:none;color:var(--rose);font-size:16px;cursor:pointer;padding:0">✕</button>
+    </div>`).join('');
+}
+function addItem() { invoiceItems.push({ desc: '', qty: 1, rate: 0 }); renderItems(); }
+function removeItem(i) { invoiceItems.splice(i, 1); renderItems(); }
+
+// Set today's date as default
+document.getElementById('i-date').value = new Date().toISOString().split('T')[0];
+const due = new Date(); due.setDate(due.getDate() + 15);
+document.getElementById('i-due').value = due.toISOString().split('T')[0];
+document.getElementById('i-num').value = 'INV-' + Date.now().toString().slice(-4);
+renderItems();
+
+function generateInvoice() {
+  const from = document.getElementById('i-from').value || 'Your Name';
+  const gst = document.getElementById('i-gst').value;
+  const cname = document.getElementById('i-cname').value || 'Client Name';
+  const caddr = document.getElementById('i-caddr').value || 'Client Address';
+  const num = document.getElementById('i-num').value;
+  const date = document.getElementById('i-date').value;
+  const dueDate = document.getElementById('i-due').value;
+  const gstRate = parseFloat(document.getElementById('i-gstrate').value);
+  const payMethod = document.getElementById('i-pay').value;
+  const upi = document.getElementById('i-upi').value;
+
+  const subtotal = invoiceItems.reduce((s, item) => s + (item.qty * item.rate), 0);
+  const gstAmt = subtotal * gstRate / 100;
+  const total = subtotal + gstAmt;
+
+  const preview = document.getElementById('i-preview');
+  preview.innerHTML = `
+  <div class="inv-preview" id="inv-print">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px">
+      <div>
+        <h2 style="color:#111;font-family:'Syne',sans-serif">TAX INVOICE</h2>
+        <div style="font-size:13px;color:#666;margin-top:4px">Invoice #: <strong>${num}</strong></div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:16px;font-weight:700;color:#111">${from}</div>
+        ${gst ? `<div style="font-size:12px;color:#666">GSTIN: ${gst}</div>` : ''}
+      </div>
+    </div>
+    <div class="inv-meta">
+      <div><strong style="font-size:11px;text-transform:uppercase;color:#999">Bill To</strong><br>${cname}<br><span style="color:#666">${caddr}</span></div>
+      <div style="text-align:right"><strong style="font-size:11px;text-transform:uppercase;color:#999">Details</strong><br>Date: ${date}<br>Due: <strong style="color:#e53e3e">${dueDate}</strong></div>
+    </div>
+    <table class="inv-table">
+      <thead><tr><th>#</th><th>Description</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead>
+      <tbody>${invoiceItems.map((item, i) => `<tr><td>${i+1}</td><td>${item.desc || '—'}</td><td>${item.qty}</td><td>₹${item.rate.toLocaleString('en-IN')}</td><td>₹${(item.qty*item.rate).toLocaleString('en-IN')}</td></tr>`).join('')}</tbody>
+    </table>
+    <div class="inv-total">
+      <div>Subtotal: ₹${subtotal.toLocaleString('en-IN')}</div>
+      ${gstRate > 0 ? `<div>GST @${gstRate}%: ₹${gstAmt.toLocaleString('en-IN')}</div>` : ''}
+      <div style="margin-top:8px">Total Due: <strong>₹${total.toLocaleString('en-IN')}</strong></div>
+    </div>
+    <div class="inv-footer">
+      <strong>Payment Method:</strong> ${payMethod}${upi ? ` | UPI: ${upi}` : ''}<br>
+      Thank you for your business! Please pay by ${dueDate}.
+    </div>
+  </div>`;
+
+  document.getElementById('i-empty').classList.add('hidden');
+  document.getElementById('i-results').classList.remove('hidden');
+
+  // Add to tracker
+  const inv = { num, client: cname, amount: total, due: dueDate, status: 'Pending', date };
+  if (!store.invoices.find(x => x.num === num)) {
+    store.invoices.push(inv);
+    store.stats.invoiced = (store.stats.invoiced || 0) + total;
+    save(); updateHubStats();
+    renderInvoiceTracker();
+    logActivity(`Invoice ${num} created for ${cname} — ₹${total.toLocaleString('en-IN')}`, 'var(--emerald)');
+    toast('✅ Invoice generated!');
+  }
+}
+
+function renderInvoiceTracker() {
+  const body = document.getElementById('i-track-body');
+  const statusColors = { Paid: 'var(--emerald)', Pending: 'var(--gold)', Overdue: 'var(--rose)' };
+  body.innerHTML = store.invoices.map((inv, i) => `
+    <tr>
+      <td class="mono" style="font-size:12px">${inv.num}</td>
+      <td>${inv.client}</td>
+      <td class="mono">₹${inv.amount.toLocaleString('en-IN')}</td>
+      <td style="font-size:12px">${inv.due}</td>
+      <td><span class="tag" style="background:${statusColors[inv.status]}22;color:${statusColors[inv.status]}">${inv.status}</span></td>
+      <td><button class="btn-sm" onclick="markPaid(${i})">✅ Paid</button></td>
+    </tr>`).join('');
+}
+
+function markPaid(i) {
+  store.invoices[i].status = 'Paid';
+  save(); renderInvoiceTracker();
+  toast('✅ Marked as Paid!');
+  logActivity(`Payment received: ${store.invoices[i].num}`, 'var(--emerald)');
+}
+
+function trackPayment() { toast('✅ Invoice tracked in Payment Tracker below!'); renderInvoiceTracker(); }
+function printInvoice() { window.print(); }
+function copyInvoiceText() {
+  const el = document.getElementById('inv-print');
+  if (el) navigator.clipboard.writeText(el.innerText).then(() => toast('📋 Copied!'));
+}
+
+/* ════════════════════════════════════════════
+   TOOL 4 — PROJECT COMMAND CENTER
+════════════════════════════════════════════ */
+initChips('pr-priority');
+
+function addProject() {
+  const name = document.getElementById('pr-name').value.trim();
+  if (!name) { toast('⚠ Enter project name'); return; }
+  const proj = {
+    id: Date.now(), name,
+    client: document.getElementById('pr-client').value,
+    deadline: document.getElementById('pr-deadline').value,
+    budget: document.getElementById('pr-budget').value,
+    priority: getChipVal('pr-priority') || 'medium',
+    desc: document.getElementById('pr-desc').value,
+    status: 'todo',
+    tasks: []
+  };
+  store.projects.push(proj);
+  save();
+  updateProjectSelect();
+  renderKanban();
+  document.getElementById('pr-name').value = '';
+  document.getElementById('pr-client').value = '';
+  document.getElementById('pr-desc').value = '';
+  logActivity(`Project added: "${name}"`, 'var(--sky)');
+  toast('✅ Project added!');
+}
+
+function addTask() {
+  const taskName = document.getElementById('pr-task').value.trim();
+  const projId = document.getElementById('pr-task-proj').value;
+  if (!taskName || !projId) { toast('⚠ Enter task name and select project'); return; }
+  const proj = store.projects.find(p => p.id == projId);
+  if (!proj) return;
+  proj.tasks = proj.tasks || [];
+  proj.tasks.push({ id: Date.now(), name: taskName, status: 'todo' });
+  save(); renderKanban();
+  document.getElementById('pr-task').value = '';
+  toast('✅ Task added!');
+}
+
+function updateProjectSelect() {
+  const sel = document.getElementById('pr-task-proj');
+  sel.innerHTML = '<option value="">Select project...</option>' + store.projects.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+}
+
+function renderKanban() {
+  document.getElementById('pr-empty').classList.toggle('hidden', store.projects.length > 0);
+  document.getElementById('pr-results').classList.toggle('hidden', store.projects.length === 0);
+  const cols = { todo: [], inprog: [], review: [], done: [] };
+  const pColors = { low: '#10b981', medium: '#f5b731', high: '#f43f5e' };
+
+  store.projects.forEach(p => {
+    const col = p.status === 'todo' ? 'todo' : p.status === 'inprog' ? 'inprog' : p.status === 'review' ? 'review' : 'done';
+    cols[col].push(p);
+  });
+
+  ['todo','inprog','review','done'].forEach(col => {
+    const container = document.getElementById('kb-' + col);
+    const hd = container.querySelector('.kb-col-hd');
+    const count = document.getElementById('cnt-' + col);
+    if (count) count.textContent = cols[col].length;
+    // Remove old cards
+    [...container.querySelectorAll('.kb-card')].forEach(c => c.remove());
+    cols[col].forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'kb-card';
+      card.innerHTML = `
+        <div class="kb-card-title">${p.name}</div>
+        <div class="kb-card-meta">
+          <div class="priority-dot" style="background:${pColors[p.priority]||'var(--gold)'}"></div>
+          <span>${p.client || 'No client'}</span>
+          ${p.deadline ? `<span>📅 ${p.deadline}</span>` : ''}
+          ${p.budget ? `<span>💰 ₹${parseInt(p.budget).toLocaleString('en-IN')}</span>` : ''}
+        </div>
+        <div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap">
+          ${col !== 'todo' ? `<button class="btn-sm" onclick="moveProject(${p.id},'prev')">← Back</button>` : ''}
+          ${col !== 'done' ? `<button class="btn-sm primary" onclick="moveProject(${p.id},'next')">Next →</button>` : ''}
+          <button class="btn-sm" onclick="deleteProject(${p.id})" style="color:var(--rose)">🗑</button>
+        </div>`;
+      container.appendChild(card);
+    });
+  });
+}
+
+function moveProject(id, dir) {
+  const order = ['todo','inprog','review','done'];
+  const p = store.projects.find(x => x.id === id);
+  if (!p) return;
+  const ci = order.indexOf(p.status);
+  if (dir === 'next' && ci < 3) p.status = order[ci + 1];
+  if (dir === 'prev' && ci > 0) p.status = order[ci - 1];
+  save(); renderKanban();
+  logActivity(`"${p.name}" moved to ${p.status}`, 'var(--sky)');
+}
+
+function deleteProject(id) {
+  store.projects = store.projects.filter(p => p.id !== id);
+  save(); renderKanban(); updateProjectSelect();
+  toast('🗑 Project deleted');
+}
+
+function clearProjects() { if (confirm('Delete all projects?')) { store.projects = []; save(); renderKanban(); } }
+
+document.getElementById('pr-ai-btn').addEventListener('click', async () => {
+  if (!store.projects.length) { toast('⚠ Add projects first!'); return; }
+  const summary = store.projects.map(p => `- ${p.name} (${p.client}, ${p.status}, deadline: ${p.deadline || 'none'}, budget: ₹${p.budget || 'TBD'})`).join('\n');
+  document.getElementById('pr-ai-result').style.display = 'block';
+  document.getElementById('pr-ai-btn').disabled = true;
+  try {
+    const text = await callAI(`You are a project management advisor. Analyze this freelancer's current project portfolio and give a brief status report with recommendations:
+
+${summary}
+
+Provide:
+### Current Status Overview
+### Priority Recommendations  
+### Risk Alerts (if any)
+### This Week's Focus
+### Tips to Increase Earnings
+
+Be specific, practical, and concise. Format nicely with **bold** for key points.`, 1500);
+    typeWrite(document.getElementById('pr-ai-content'), text);
+    logActivity('AI project status report generated', 'var(--violet)');
+  } catch (e) { toast('❌ ' + e.message); }
+  document.getElementById('pr-ai-btn').disabled = false;
+});
+
+/* ════════════════════════════════════════════
+   TOOL 5 — TIME TRACKER
+════════════════════════════════════════════ */
+let timerInterval = null, timerStart = null, timerPaused = 0, timerRunning = false, timerElapsed = 0;
+
+function pad(n) { return String(n).padStart(2, '0'); }
+function formatDur(ms) {
+  const s = Math.floor(ms / 1000), h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+  return `${pad(h)}:${pad(m)}:${pad(sec)}`;
+}
+
+function startTimer() {
+  if (timerRunning) return;
+  timerRunning = true;
+  timerStart = Date.now() - timerElapsed;
+  timerInterval = setInterval(() => {
+    timerElapsed = Date.now() - timerStart;
+    document.getElementById('timer-display').textContent = formatDur(timerElapsed);
+  }, 1000);
+  document.getElementById('tt-start').classList.add('hidden');
+  document.getElementById('tt-pause').classList.remove('hidden');
+  const client = document.getElementById('tt-client').value || 'Unknown';
+  const task = document.getElementById('tt-task').value || 'General work';
+  document.getElementById('tt-current-label').textContent = `⏱ ${client} — ${task}`;
+}
+
+function pauseTimer() {
+  if (!timerRunning) return;
+  timerRunning = false;
+  clearInterval(timerInterval);
+  document.getElementById('tt-pause').textContent = '▶ Resume';
+  document.getElementById('tt-pause').onclick = resumeTimer;
+}
+
+function resumeTimer() {
+  timerStart = Date.now() - timerElapsed;
+  timerRunning = true;
+  timerInterval = setInterval(() => {
+    timerElapsed = Date.now() - timerStart;
+    document.getElementById('timer-display').textContent = formatDur(timerElapsed);
+  }, 1000);
+  document.getElementById('tt-pause').textContent = '⏸ Pause';
+  document.getElementById('tt-pause').onclick = pauseTimer;
+}
+
+function stopTimer() {
+  if (timerElapsed < 5000) { toast('⚠ Timer too short to log'); return; }
+  clearInterval(timerInterval);
+  timerRunning = false;
+  const hours = timerElapsed / 3600000;
+  const rate = parseFloat(document.getElementById('tt-rate').value) || 0;
+  const client = document.getElementById('tt-client').value || 'Unknown';
+  const task = document.getElementById('tt-task').value || 'General work';
+  const log = { id: Date.now(), date: new Date().toLocaleDateString('en-IN'), client, task, hours: +hours.toFixed(2), rate, earnings: +(hours * rate).toFixed(0), duration: formatDur(timerElapsed) };
+  store.timeLogs.push(log);
+  store.stats.hours = (store.stats.hours || 0) + hours;
+  save(); updateHubStats(); renderTimeLogs();
+  timerElapsed = 0;
+  document.getElementById('timer-display').textContent = '00:00:00';
+  document.getElementById('tt-start').classList.remove('hidden');
+  document.getElementById('tt-pause').classList.add('hidden');
+  document.getElementById('tt-pause').textContent = '⏸ Pause';
+  document.getElementById('tt-pause').onclick = pauseTimer;
+  document.getElementById('tt-current-label').textContent = 'Select client & task, then start timer';
+  logActivity(`Logged ${hours.toFixed(1)}h for ${client}`, 'var(--orange)');
+  toast(`✅ ${hours.toFixed(1)}h logged for ${client}!`);
+}
+
+function manualLog() {
+  const hours = parseFloat(document.getElementById('tt-hours').value);
+  if (!hours || hours <= 0) { toast('⚠ Enter valid hours'); return; }
+  const client = document.getElementById('tt-client').value || 'Unknown';
+  const task = document.getElementById('tt-task').value || 'General work';
+  const rate = parseFloat(document.getElementById('tt-rate').value) || 0;
+  const date = document.getElementById('tt-date').value || new Date().toLocaleDateString('en-IN');
+  const h = Math.floor(hours); const m = Math.round((hours - h) * 60);
+  const log = { id: Date.now(), date, client, task, hours, rate, earnings: +(hours * rate).toFixed(0), duration: `${pad(h)}:${pad(m)}:00` };
+  store.timeLogs.push(log);
+  store.stats.hours = (store.stats.hours || 0) + hours;
+  save(); updateHubStats(); renderTimeLogs();
+  document.getElementById('tt-hours').value = '';
+  logActivity(`Manual log: ${hours}h for ${client}`, 'var(--orange)');
+  toast(`✅ ${hours}h logged!`);
+}
+
+function deleteLog(id) {
+  const log = store.timeLogs.find(l => l.id === id);
+  if (log) store.stats.hours = Math.max(0, (store.stats.hours || 0) - log.hours);
+  store.timeLogs = store.timeLogs.filter(l => l.id !== id);
+  save(); updateHubStats(); renderTimeLogs();
+}
+
+function renderTimeLogs() {
+  const logs = store.timeLogs;
+  document.getElementById('tt-empty').classList.toggle('hidden', logs.length > 0);
+  const totalH = logs.reduce((s, l) => s + l.hours, 0);
+  const totalE = logs.reduce((s, l) => s + l.earnings, 0);
+  document.getElementById('tt-total-display').textContent = `Total: ${totalH.toFixed(1)}h | Earnings: ₹${totalE.toLocaleString('en-IN')}`;
+  const body = document.getElementById('tt-tbody');
+  body.innerHTML = logs.slice().reverse().map(l => `
+    <tr>
+      <td style="font-size:12px">${l.date}</td>
+      <td style="font-weight:600">${l.client}</td>
+      <td style="font-size:12px;color:var(--muted)">${l.task}</td>
+      <td class="mono" style="font-size:12px">${l.duration}</td>
+      <td class="mono" style="font-size:12px">₹${l.rate}/hr</td>
+      <td class="mono" style="color:var(--emerald)">₹${l.earnings.toLocaleString('en-IN')}</td>
+      <td><button class="btn-sm" onclick="deleteLog(${l.id})" style="color:var(--rose)">✕</button></td>
+    </tr>`).join('');
+}
+
+document.getElementById('tt-report-btn').addEventListener('click', async () => {
+  if (!store.timeLogs.length) { toast('⚠ Log some time first!'); return; }
+  const card = document.getElementById('tt-report-card');
+  card.classList.remove('hidden');
+  document.getElementById('tt-r-loading').classList.remove('hidden');
+  document.getElementById('tt-report-content').innerHTML = '';
+  document.getElementById('tt-report-btn').disabled = true;
+
+  const totalH = store.timeLogs.reduce((s, l) => s + l.hours, 0);
+  const totalE = store.timeLogs.reduce((s, l) => s + l.earnings, 0);
+  const byClient = {};
+  store.timeLogs.forEach(l => { byClient[l.client] = (byClient[l.client] || 0) + l.hours; });
+  const summary = Object.entries(byClient).map(([c, h]) => `${c}: ${h.toFixed(1)}h`).join(', ');
+
+  try {
+    const text = await callAI(`You are a freelance business advisor. Analyze this freelancer's time tracking data and generate an insightful productivity report:
+
+Total Hours Logged: ${totalH.toFixed(1)}h
+Total Earnings: ₹${totalE.toLocaleString('en-IN')}
+Average Rate: ₹${totalH > 0 ? (totalE/totalH).toFixed(0) : 0}/hr
+Time by Client: ${summary}
+Number of Entries: ${store.timeLogs.length}
+
+Provide a report with:
+### ⏱ Productivity Summary
+### 💰 Earnings Analysis
+### 🎯 Top Clients by Time
+### 📈 Rate Optimization Tips
+### ✅ This Week's Recommendations
+
+Be specific with numbers. Give actionable advice to increase hourly rate and efficiency.`, 1500);
+
+    document.getElementById('tt-r-loading').classList.add('hidden');
+    typeWrite(document.getElementById('tt-report-content'), text);
+    logActivity('AI productivity report generated', 'var(--orange)');
+  } catch (e) {
+    document.getElementById('tt-r-loading').classList.add('hidden');
+    toast('❌ ' + e.message);
+  }
+  document.getElementById('tt-report-btn').disabled = false;
+});
+
+/* ════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════ */
+load();
+checkApiState();
+renderInvoiceTracker();
+renderTimeLogs();
+if (store.projects.length) { updateProjectSelect(); renderKanban(); }
+
+// Welcome
+if (!API_KEY) setTimeout(() => toast('👋 Connect API key to enable AI features!', 4000), 1200);
+</script>
+</body>
+</html>
